@@ -1,0 +1,57 @@
+openapi: 3.0.2
+info:
+    title: Blog API - Swagger Documentation
+    description: 
+    version: 1.0.0
+paths:
+    /api/comments:
+        get:
+            tags:
+                - Comment
+            summary: Get All Comments
+            responses:
+                '200':
+                    description: OK
+                '401':
+                    description: Unauthorized
+                '404':
+                    description: Page not found
+                '422':
+                    description: Unprocessable Entity
+                '500':
+                    description: Internal server error
+
+        post:
+            tags:
+                - Comment
+            summary: Create Comment
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            description: ""
+                            properties:
+                                user_name:
+                                    type: string
+                                content: 
+                                    type: string
+                            required:
+                                - user_name
+                                - content
+                            type: object
+            responses:
+                '200':
+                    description: OK
+                '401':
+                    description: Unauthorized
+                '404':
+                    description: Page not found
+                '422':
+                    description: Unprocessable Entity
+                '500':
+                    description: Internal server error
+components:
+tags:
+    - name: Comment
+      description: Comment API endpoint
