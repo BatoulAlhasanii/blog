@@ -5,7 +5,6 @@
             :key="i" :comment="comment"
             :grouped_comments="grouped_comments"
             :level="level"
-            @comment-created="$emit('comment-created')"
         />
     </ul>
 </template>

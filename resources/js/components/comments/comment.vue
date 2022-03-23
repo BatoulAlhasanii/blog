@@ -14,7 +14,7 @@
                 <CommentForm 
                     v-if="level !== 3"
                     :parent_id="comment.id"
-                    @comment-created="$emit('comment-created')"
+                    :grouped_comments="grouped_comments"
                 />
 
                 <CommentList
@@ -22,7 +22,6 @@
                     :grouped_comments="grouped_comments"
                     :comment_group="grouped_comments[comment.id]"
                     :level="level + 1"
-                    @comment-created="$emit('comment-created')"
                 />
 
             </div>

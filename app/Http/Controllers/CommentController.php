@@ -21,6 +21,9 @@ class CommentController extends Controller
     {
         $comment = Comment::create($request->validated());
 
-        return response()->json(['message' => 'Comment Created Successfully'], 201); 
+        return response()->json([
+            'message' => 'Comment Created Successfully',
+            'comment' => $comment
+        ], 201); 
     }
 }

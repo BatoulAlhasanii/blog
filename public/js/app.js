@@ -5403,7 +5403,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'Comment',
@@ -5461,6 +5460,9 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     'parent_id': {
       "default": null
+    },
+    'grouped_comments': {
+      type: Object
     }
   },
   data: function data() {
@@ -5499,7 +5501,16 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/api/comments', this.comment).then(function (response) {
         _this.resetData();
 
-        _this.$emit('comment-created');
+        if (!_this.parent_id) {
+          _this.grouped_comments['root'].unshift(response.data.comment);
+        } else if (_this.parent_id && _this.grouped_comments[_this.parent_id]) {
+          _this.grouped_comments[_this.parent_id].unshift(response.data.comment);
+        } else {
+          window.Vue.set(_this.grouped_comments, _this.parent_id, []);
+
+          _this.grouped_comments[_this.parent_id].push(response.data.comment);
+        } // this.$emit('comment-created');
+
       })["catch"](function (error) {
         console.log(error);
       });
@@ -5560,7 +5571,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'CommentList',
@@ -5585,7 +5595,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _comments_list_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../comments/list.vue */ "./resources/js/components/comments/list.vue");
 /* harmony import */ var _comments_form_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../comments/form.vue */ "./resources/js/components/comments/form.vue");
-//
 //
 //
 //
@@ -28524,11 +28533,9 @@ var render = function () {
           _vm._v(" "),
           _vm.level !== 3
             ? _c("CommentForm", {
-                attrs: { parent_id: _vm.comment.id },
-                on: {
-                  "comment-created": function ($event) {
-                    return _vm.$emit("comment-created")
-                  },
+                attrs: {
+                  parent_id: _vm.comment.id,
+                  grouped_comments: _vm.grouped_comments,
                 },
               })
             : _vm._e(),
@@ -28539,11 +28546,6 @@ var render = function () {
                   grouped_comments: _vm.grouped_comments,
                   comment_group: _vm.grouped_comments[_vm.comment.id],
                   level: _vm.level + 1,
-                },
-                on: {
-                  "comment-created": function ($event) {
-                    return _vm.$emit("comment-created")
-                  },
                 },
               })
             : _vm._e(),
@@ -28683,11 +28685,6 @@ var render = function () {
           grouped_comments: _vm.grouped_comments,
           level: _vm.level,
         },
-        on: {
-          "comment-created": function ($event) {
-            return _vm.$emit("comment-created")
-          },
-        },
       })
     }),
     1
@@ -28749,7 +28746,6 @@ var render = function () {
                                 comment_group: _vm.grouped_comments["root"],
                                 level: 1,
                               },
-                              on: { "comment-created": _vm.getComments },
                             }),
                             _vm._v(" "),
                             _c(
@@ -28757,7 +28753,9 @@ var render = function () {
                               { staticClass: "py-3" },
                               [
                                 _c("CommentForm", {
-                                  on: { "comment-created": _vm.getComments },
+                                  attrs: {
+                                    grouped_comments: _vm.grouped_comments,
+                                  },
                                 }),
                               ],
                               1

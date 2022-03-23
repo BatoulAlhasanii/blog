@@ -21,12 +21,11 @@
                                         :grouped_comments="grouped_comments"
                                         :comment_group="grouped_comments['root']"
                                         :level="1"
-                                        @comment-created="getComments"
                                     />
                                     <div class="py-3">
 
                                         <CommentForm
-                                            @comment-created="getComments"
+                                            :grouped_comments="grouped_comments"
                                         />
 
                                     </div>

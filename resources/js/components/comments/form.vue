@@ -34,6 +34,9 @@ export default {
     props: {
         'parent_id': {
             default: null
+        },
+        'grouped_comments': {
+            type: Object
         }
     },
     data() {
@@ -68,7 +71,18 @@ export default {
             .then ((response) => {
 
                 this.resetData()
-                this.$emit('comment-created');
+                
+                if (!this.parent_id) {
+                     this.grouped_comments['root'].unshift(response.data.comment)
+                }
+                else if (this.parent_id && this.grouped_comments[this.parent_id]) {
+                    this.grouped_comments[this.parent_id].unshift(response.data.comment)
+                } else {
+                    window.Vue.set(this.grouped_comments, this.parent_id, [])
+                    this.grouped_comments[this.parent_id].push(response.data.comment)
+                }
+
+                // this.$emit('comment-created');
 
             }).catch((error) => {
                 console.log(error);
